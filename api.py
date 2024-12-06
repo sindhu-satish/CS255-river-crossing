@@ -35,6 +35,19 @@ def missionary_cannibal():
         return json.dumps(missionary_cannibal_a_star.solve_missionaries_cannibals(M_total, C_total, M_left, C_left, M_right, C_right, boat_position))
     
 
-    
+@app.route("/jealous-husband")
+def jealous_husband():
+    parameters = json.loads(request.data)
+    print(parameters)
+    num_of_couples = parameters["num_of_couples"]
+    solver = parameters["solver"]
+    if solver == "bfs":
+        return json.dumps(jealous_husbands_bfs.solve_jealous_husbands(N=num_of_couples))
+    if solver == "dfs":
+        return json.dumps(jealous_husbands_dfs.solve_jealous_husbands(N=num_of_couples))
+    if solver == "a_star":
+        return json.dumps(jealous_husbands_a_star.solve_jealous_husbands(N=num_of_couples))
+ 
+
 if __name__ == "__main__":
     app.run(debug=True)
