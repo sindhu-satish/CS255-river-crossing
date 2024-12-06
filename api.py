@@ -28,11 +28,11 @@ def missionary_cannibal():
     boat_position = parameters["boat_position"]
     solver = parameters["solver"]
     if solver == "bfs":
-        return missionary_cannibal_solver_bfs.solve_missionaries_cannibals(M_total, C_total, M_left, C_left, M_right, C_right, boat_position)
+        return json.dumps(missionary_cannibal_solver_bfs.solve_missionaries_cannibals(M_total, C_total, M_left, C_left, M_right, C_right, boat_position))
     if solver == "dfs":
-        return missionary_cannibal_solver_dfs.solve_missionaries_cannibals(M_total, C_total, M_left, C_left, M_right, C_right, boat_position)
+        return json.dumps(missionary_cannibal_solver_dfs.solve_missionaries_cannibals(M_total, C_total, M_left, C_left, M_right, C_right, boat_position))
     if solver == "a_star":
-        return missionary_cannibal_a_star.solve_missionaries_cannibals(M_total, C_total, M_left, C_left, M_right, C_right, boat_position)
+        return json.dumps(missionary_cannibal_a_star.solve_missionaries_cannibals(M_total, C_total, M_left, C_left, M_right, C_right, boat_position))
     
 
     
