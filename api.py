@@ -15,7 +15,7 @@ def test():
     return "Server running"
 
 
-@app.route("/missionary-cannibal")
+@app.route("/missionary-cannibal", methods = ['POST'])
 def missionary_cannibal():
     parameters = json.loads(request.data)
     print(parameters)
@@ -35,7 +35,7 @@ def missionary_cannibal():
         return json.dumps(missionary_cannibal_a_star.solve_missionaries_cannibals(M_total, C_total, M_left, C_left, M_right, C_right, boat_position))
     
 
-@app.route("/jealous-husband")
+@app.route("/jealous-husband", methods = ['POST'])
 def jealous_husband():
     parameters = json.loads(request.data)
     print(parameters)
@@ -50,4 +50,4 @@ def jealous_husband():
  
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)
