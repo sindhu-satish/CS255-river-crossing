@@ -6,7 +6,7 @@ pip install -r requirements.txt
 ```
 
 ```cmd
-python api.py
+python -m flask run
 ```
 
 ## API Call
