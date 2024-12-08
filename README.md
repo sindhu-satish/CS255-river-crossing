@@ -12,15 +12,15 @@ python api.py
 ## API Call
 ### Missionary Cannibal
 ```cmd
-curl -X GET \
+curl -X POST \
   -H "Content-Type: application/json" \
-  -d '{"num_of_couples": 3, "solver": "my_solver"}' \
+  -d '{"num_of_couples": 3, "solver": "a_star"}' \
   http://localhost:5000/jealous-husband
 ```
 
 ### Jealous Husbands
 ```cmd
-curl -X GET \
+curl -X POST \
   -H "Content-Type: application/json" \
   -d '{
     "M_total": 3,
