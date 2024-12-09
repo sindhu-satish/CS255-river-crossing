@@ -6,9 +6,11 @@ import missionary_cannibal_solver_bfs
 import missionary_cannibal_solver_dfs
 
 from flask import Flask, request
+from flask_cors import CORS, cross_origin
 import json
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route("/")
 def test():
@@ -16,6 +18,7 @@ def test():
 
 
 @app.route("/missionary-cannibal", methods = ['POST'])
+@cross_origin()
 def missionary_cannibal():
     parameters = json.loads(request.data)
     print(parameters)
@@ -36,6 +39,7 @@ def missionary_cannibal():
     
 
 @app.route("/jealous-husband", methods = ['POST'])
+@cross_origin()
 def jealous_husband():
     parameters = json.loads(request.data)
     print(parameters)
