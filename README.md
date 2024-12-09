@@ -15,7 +15,7 @@ python -m flask run
 curl -X POST \
   -H "Content-Type: application/json" \
   -d '{"num_of_couples": 11, "solver": "a_star", "boat_capacity": 4}' \
-  http://127.0.0.1:5000/jealous-husban
+  http://localhost:5000/jealous-husband
 ```
 
 ### Jealous Husbands
