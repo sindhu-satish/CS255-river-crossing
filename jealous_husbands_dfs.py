@@ -1,3 +1,5 @@
+from itertools import combinations
+
 def is_valid_side(people):
     """
     Check if the given side (set of (Gender, ID)) satisfies the jealous husbands constraint.
@@ -21,69 +23,62 @@ def is_valid_state(left, right):
     """
     return is_valid_side(left) and is_valid_side(right)
 
-def generate_moves(state, N):
+def generate_moves(state, N, boat_capacity):
     """
-    Given the current state, generate all possible next states by moving 1 or 2 individuals.
+    Given the current state, generate all possible next states by moving
+    from 1 up to boat_capacity individuals.
     state = (left_set, right_set, boat_position)
     """
     left, right, boat_pos = state
     if boat_pos == 'L':
         candidates = list(left)
-        # Move 1 person
-        for i in range(len(candidates)):
-            moved = [candidates[i]]
-            new_left = set(left) - set(moved)
-            new_right = set(right) | set(moved)
-            if is_valid_state(new_left, new_right):
-                yield (frozenset(new_left), frozenset(new_right), 'R')
-            
-            # Move 2 people
-            for j in range(i+1, len(candidates)):
-                moved = [candidates[i], candidates[j]]
+        # Move from 1 up to boat_capacity individuals from left to right
+        for size in range(1, boat_capacity + 1):
+            for moved in combinations(candidates, size):
                 new_left = set(left) - set(moved)
                 new_right = set(right) | set(moved)
                 if is_valid_state(new_left, new_right):
                     yield (frozenset(new_left), frozenset(new_right), 'R')
     else:
-        # Boat on right side
         candidates = list(right)
-        # Move 1 person
-        for i in range(len(candidates)):
-            moved = [candidates[i]]
-            new_right = set(right) - set(moved)
-            new_left = set(left) | set(moved)
-            if is_valid_state(new_left, new_right):
-                yield (frozenset(new_left), frozenset(new_right), 'L')
-            
-            # Move 2 people
-            for j in range(i+1, len(candidates)):
-                moved = [candidates[i], candidates[j]]
+        # Move from 1 up to boat_capacity individuals from right to left
+        for size in range(1, boat_capacity + 1):
+            for moved in combinations(candidates, size):
                 new_right = set(right) - set(moved)
                 new_left = set(left) | set(moved)
                 if is_valid_state(new_left, new_right):
                     yield (frozenset(new_left), frozenset(new_right), 'L')
 
 
-def dfs(state, goal, N, visited, parent):
+def dfs(state, goal, N, boat_capacity, visited, parent, nodes_generated):
     """
     Depth-first search for a solution.
+    
+    nodes_generated is a list with one element (to mutate inside the function).
+    We'll increment nodes_generated[0] every time we generate a new state.
     """
     if state == goal:
         return True
     
     visited.add(state)
     
-    for nxt in generate_moves(state, N):
+    for nxt in generate_moves(state, N, boat_capacity):
         if nxt not in visited:
             parent[nxt] = state
-            if dfs(nxt, goal, N, visited, parent):
+            nodes_generated[0] += 1  # Counting this newly discovered node
+            if dfs(nxt, goal, N, boat_capacity, visited, parent, nodes_generated):
                 return True
     return False
 
 
-def solve_jealous_husbands(N=3):
+def solve_jealous_husbands(N=3, boat_capacity=2):
     """
     Solve the Jealous Husbands problem using DFS.
+    
+    Returns:
+        (output, num_nodes_generated)
+        output: Dictionary of steps if a solution is found, else None.
+        num_nodes_generated: number of nodes generated in the state space.
     """
     # Initial configuration: all couples on the left bank
     left = frozenset([('H', i) for i in range(1, N+1)] + [('W', i) for i in range(1, N+1)])
@@ -93,8 +88,9 @@ def solve_jealous_husbands(N=3):
     
     visited = set()
     parent = {start: None}
+    nodes_generated = [1]  # Start node counts as generated
     
-    if dfs(start, goal, N, visited, parent):
+    if dfs(start, goal, N, boat_capacity, visited, parent, nodes_generated):
         # Reconstruct path
         path = []
         current = goal
@@ -111,15 +107,18 @@ def solve_jealous_husbands(N=3):
                 'right_bank': sorted(list(r)),
                 'boat_position': bp
             }
-        return output
+        return {"output": output, "number_of_states": nodes_generated[0]}
     else:
-        return None
+        return {"output": None, "number_of_states": nodes_generated[0]}
 
 if __name__ == "__main__":
-    # Example with N=3 couples
-    result = solve_jealous_husbands(N=3)
+    N = 5
+    boat_capacity = N-1
+    result, num_generated = solve_jealous_husbands(N, boat_capacity)
     if result:
         for step, val in result.items():
             print(step, val)
+        print("Number of nodes generated in the state space:", num_generated)
     else:
         print("No solution found.")
+        print("Number of nodes generated:", num_generated)

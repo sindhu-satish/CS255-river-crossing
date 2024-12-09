@@ -29,13 +29,14 @@ def missionary_cannibal():
     M_right = parameters["M_right"]
     C_right = parameters["C_right"]
     boat_position = parameters["boat_position"]
+    boat_capacity = parameters["boat_capacity"]
     solver = parameters["solver"]
     if solver == "bfs":
-        return json.dumps(missionary_cannibal_solver_bfs.solve_missionaries_cannibals(M_total, C_total, M_left, C_left, M_right, C_right, boat_position))
+        return json.dumps(missionary_cannibal_solver_bfs.solve_missionaries_cannibals(M_total, C_total, boat_capacity, M_left, C_left, M_right, C_right, boat_position))
     if solver == "dfs":
-        return json.dumps(missionary_cannibal_solver_dfs.solve_missionaries_cannibals(M_total, C_total, M_left, C_left, M_right, C_right, boat_position))
+        return json.dumps(missionary_cannibal_solver_dfs.solve_missionaries_cannibals(M_total, C_total, boat_capacity, M_left, C_left, M_right, C_right, boat_position))
     if solver == "a_star":
-        return json.dumps(missionary_cannibal_a_star.solve_missionaries_cannibals(M_total, C_total, M_left, C_left, M_right, C_right, boat_position))
+        return json.dumps(missionary_cannibal_a_star.solve_missionaries_cannibals(M_total, C_total, boat_capacity, M_left, C_left, M_right, C_right, boat_position))
     
 
 @app.route("/jealous-husband", methods = ['POST'])
@@ -44,13 +45,14 @@ def jealous_husband():
     parameters = json.loads(request.data)
     print(parameters)
     num_of_couples = parameters["num_of_couples"]
+    boat_capacity = parameters["boat_capacity"]
     solver = parameters["solver"]
     if solver == "bfs":
-        return json.dumps(jealous_husbands_bfs.solve_jealous_husbands(N=num_of_couples))
+        return json.dumps(jealous_husbands_bfs.solve_jealous_husbands(N=num_of_couples, boat_capacity=boat_capacity))
     if solver == "dfs":
-        return json.dumps(jealous_husbands_dfs.solve_jealous_husbands(N=num_of_couples))
+        return json.dumps(jealous_husbands_dfs.solve_jealous_husbands(N=num_of_couples, boat_capacity=boat_capacity))
     if solver == "a_star":
-        return json.dumps(jealous_husbands_a_star.solve_jealous_husbands(N=num_of_couples))
+        return json.dumps(jealous_husbands_a_star.solve_jealous_husbands(N=num_of_couples, boat_capacity=boat_capacity))
  
 
 if __name__ == "__main__":
