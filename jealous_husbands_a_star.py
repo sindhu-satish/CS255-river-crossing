@@ -52,8 +52,8 @@ def heuristic(state, N):
     Heuristic function:
     h = ceil((number_of_people_on_left) / 2)
     This heuristic is based on the assumption that, in the worst case,
-    each trip can move at most 2 people. If boat_capacity > 2, you
-    may consider adjusting the heuristic. For now, we leave it as is.
+    each trip can move at most 2 people. If boat_capacity > 2,
+    you may consider adjusting the heuristic. For now, we leave it as is.
     """
     left, right, boat_pos = state
     people_on_left = len(left)
@@ -103,15 +103,32 @@ def astar_search(N, start, goal, boat_capacity):
                 num_generated += 1
     return None, num_generated
 
-def solve_jealous_husbands(N=3, boat_capacity=2):
+def solve_jealous_husbands(N=3, boat_capacity=2, left=None, right=None, boat_pos='L'):
     """
-    Solve the Jealous Husbands problem using A* search.
-    Returns a tuple: (path_as_dict, num_generated)
+    Solve the Jealous Husbands problem using A* search with a potentially arbitrary initial state.
+    
+    Parameters:
+      N (int): number of couples
+      boat_capacity (int): capacity of the boat
+      left (array of arrays): e.g. [["H",1], ["W",1], ...]
+      right (array of arrays): e.g. [["H",3], ["W",3], ...]
+      boat_pos (str): 'L' or 'R' indicating where the boat starts. Default: 'L'
+      
+    Returns:
+      A dictionary with "output": <solution_path_dict> and "number_of_states": <int>
+      If no solution is found, "output" is None.
     """
-    # Initial state: all on left
-    left = frozenset([('H', i) for i in range(1, N+1)] + [('W', i) for i in range(1, N+1)])
-    right = frozenset()
-    start = (left, right, 'L')
+    # Convert input arrays to frozensets of tuples
+    if left is None:
+        left = frozenset([('H', i) for i in range(1, N+1)] + [('W', i) for i in range(1, N+1)])
+    else:
+        left = frozenset(tuple(p) for p in left)
+    if right is None:
+        right = frozenset()
+    else:
+        right = frozenset(tuple(p) for p in right)
+    
+    start = (left, right, boat_pos)
     goal = (frozenset(), frozenset([('H', i) for i in range(1, N+1)] + [('W', i) for i in range(1, N+1)]), 'R')
     
     path, num_generated = astar_search(N, start, goal, boat_capacity)
@@ -129,12 +146,16 @@ def solve_jealous_husbands(N=3, boat_capacity=2):
     return {"output": output, "number_of_states": num_generated}
 
 if __name__ == "__main__":
-    N = 9
-    boat_capacity = 8
-    result, num_generated = solve_jealous_husbands(N, boat_capacity)
-    if result:
-        for step, val in result.items():
+    N = 4
+    boat_capacity = 4
+    left = [["H",1], ["W",1], ["H",2], ["W",2]]
+    right = [["H",3], ["W",3], ["H",4], ["W",4]]
+    boat_pos = 'R'
+
+    result = solve_jealous_husbands(N=N, boat_capacity=boat_capacity, left=left, right=right, boat_pos=boat_pos)
+    if result["output"] is not None:
+        for step, val in result["output"].items():
             print(step, val)
     else:
         print("No solution found.")
-    print("Number of nodes generated:", num_generated)
+    print("Number of nodes generated:", result["number_of_states"])

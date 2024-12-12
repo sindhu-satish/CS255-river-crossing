@@ -46,13 +46,16 @@ def jealous_husband():
     print(parameters)
     num_of_couples = parameters["num_of_couples"]
     boat_capacity = parameters["boat_capacity"]
+    left_bank = parameters["left_bank"]
+    right_bank = parameters["right_bank"]
+    boat_position = parameters["boat_position"]
     solver = parameters["solver"]
     if solver == "bfs":
         return json.dumps(jealous_husbands_bfs.solve_jealous_husbands(N=num_of_couples, boat_capacity=boat_capacity))
     if solver == "dfs":
         return json.dumps(jealous_husbands_dfs.solve_jealous_husbands(N=num_of_couples, boat_capacity=boat_capacity))
     if solver == "a_star":
-        return json.dumps(jealous_husbands_a_star.solve_jealous_husbands(N=num_of_couples, boat_capacity=boat_capacity))
+        return json.dumps(jealous_husbands_a_star.solve_jealous_husbands(N=num_of_couples, boat_capacity=boat_capacity, left=left_bank, right=right_bank, boat_pos=boat_position))
  
 
 if __name__ == "__main__":
