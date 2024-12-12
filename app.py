@@ -52,9 +52,9 @@ def jealous_husband():
     right_bank = stage["right_bank"]
     boat_position = stage["boat_position"]
     if solver == "bfs":
-        return json.dumps(jealous_husbands_bfs.solve_jealous_husbands(N=num_of_couples, boat_capacity=boat_capacity))
+        return json.dumps(jealous_husbands_bfs.solve_jealous_husbands(N=num_of_couples, boat_capacity=boat_capacity, left=left_bank, right=right_bank, boat_pos=boat_position))
     if solver == "dfs":
-        return json.dumps(jealous_husbands_dfs.solve_jealous_husbands(N=num_of_couples, boat_capacity=boat_capacity))
+        return json.dumps(jealous_husbands_dfs.solve_jealous_husbands(N=num_of_couples, boat_capacity=boat_capacity, left=left_bank, right=right_bank, boat_pos=boat_position))
     if solver == "a_star":
         return json.dumps(jealous_husbands_a_star.solve_jealous_husbands(N=num_of_couples, boat_capacity=boat_capacity, left=left_bank, right=right_bank, boat_pos=boat_position))
  

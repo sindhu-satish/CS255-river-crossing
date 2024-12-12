@@ -4,8 +4,7 @@ import itertools
 def is_valid_side(people):
     """
     Check if the given side (set of (Gender, ID)) satisfies the jealous husbands constraint.
-    Constraint:
-    For each woman W_i, if H_i is not present on this side, then there must be no men (H_j) on this side.
+    For each woman W_i, if H_i is not present on this side, then no other man can be present.
     """
     men = {p for p in people if p[0] == 'H'}
     women = {p for p in people if p[0] == 'W'}
@@ -14,8 +13,7 @@ def is_valid_side(people):
         i = w[1]
         h = ('H', i)
         if h not in people:
-            # Her husband is not here
-            # Check if any other man is present
+            # Her husband is not here, so no other men allowed
             if len(men) > 0:
                 return False
     return True
@@ -51,21 +49,33 @@ def generate_moves(state, N, boat_capacity):
                 if is_valid_state(new_left, new_right):
                     yield (frozenset(new_left), frozenset(new_right), 'L')
 
-def solve_jealous_husbands(N=3, boat_capacity=2):
+def solve_jealous_husbands(N=3, boat_capacity=2, left=None, right=None, boat_pos='L'):
     """
-    Solve the jealous husbands problem using BFS.
-    Initially, all N couples (H1,W1,...,HN,WN) are on the left bank.
-    Goal: Move everyone to the right bank.
+    Solve the jealous husbands problem using BFS with a possibly arbitrary initial state.
     
+    Parameters:
+        N (int): number of couples
+        boat_capacity (int): capacity of the boat
+        left (array of arrays): e.g. [["H",1], ["W",1], ["H",2], ["W",2]]
+        right (array of arrays): e.g. [["H",3], ["W",3], ["H",4], ["W",4]]
+        boat_pos (str): 'L' or 'R' indicating where the boat starts
+        
     Returns:
-       (output, num_visited)
-       output: A dictionary of steps if a solution is found, else None.
-       num_visited: The number of states visited in the state space.
+       A dictionary: {"output": <path_dict>, "number_of_states": <int>}
+       If no solution is found, "output" is None.
     """
-    # Create initial sets
-    left = frozenset([('H', i) for i in range(1, N+1)] + [('W', i) for i in range(1, N+1)])
-    right = frozenset()
-    start = (left, right, 'L')
+    # Convert input arrays to frozensets of tuples if given
+    if left is None:
+        left = frozenset([('H', i) for i in range(1, N+1)] + [('W', i) for i in range(1, N+1)])
+    else:
+        left = frozenset(tuple(p) for p in left)
+        
+    if right is None:
+        right = frozenset()
+    else:
+        right = frozenset(tuple(p) for p in right)
+        
+    start = (left, right, boat_pos)
     goal = (frozenset(), frozenset([('H', i) for i in range(1, N+1)] + [('W', i) for i in range(1, N+1)]), 'R')
     
     # BFS
@@ -103,15 +113,18 @@ def solve_jealous_husbands(N=3, boat_capacity=2):
     return {"output": None, "number_of_states": len(visited)}
 
 if __name__ == "__main__":
+    # Example usage:
     N = 4
-    boat_capacity = N - 1
-    result, num_visited = solve_jealous_husbands(N, boat_capacity)
-    res_list = []
-    if result:
-        for step, val in result.items():
-            res_list.append(val)
-        print(res_list)
-        print("Number of visited states:", num_visited)
+    boat_capacity = 4
+    left_bank = [["H",1], ["W",1], ["H",2], ["W",2]]
+    right_bank = [["H",3], ["W",3], ["H",4], ["W",4]]
+    boat_position = 'R'
+    
+    result = solve_jealous_husbands(N=N, boat_capacity=boat_capacity, left=left_bank, right=right_bank, boat_pos=boat_position)
+    if result["output"] is not None:
+        for step, val in result["output"].items():
+            print(step, val)
+        print("Number of visited states:", result["number_of_states"])
     else:
         print("No solution found.")
-        print("Number of visited states:", num_visited)
+        print("Number of visited states:", result["number_of_states"])

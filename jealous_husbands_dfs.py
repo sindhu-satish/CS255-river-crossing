@@ -49,7 +49,6 @@ def generate_moves(state, N, boat_capacity):
                 if is_valid_state(new_left, new_right):
                     yield (frozenset(new_left), frozenset(new_right), 'L')
 
-
 def dfs(state, goal, N, boat_capacity, visited, parent, nodes_generated):
     """
     Depth-first search for a solution.
@@ -70,20 +69,33 @@ def dfs(state, goal, N, boat_capacity, visited, parent, nodes_generated):
                 return True
     return False
 
-
-def solve_jealous_husbands(N=3, boat_capacity=2):
+def solve_jealous_husbands(N=3, boat_capacity=2, left=None, right=None, boat_pos='L'):
     """
-    Solve the Jealous Husbands problem using DFS.
+    Solve the Jealous Husbands problem using DFS with the ability to set an arbitrary initial state.
+    
+    Parameters:
+        N (int): number of couples
+        boat_capacity (int): capacity of the boat
+        left (array of arrays): e.g. [["H",1], ["W",1], ...]
+        right (array of arrays): e.g. [["H",3], ["W",3], ...]
+        boat_pos (str): 'L' or 'R' indicating where the boat starts
     
     Returns:
-        (output, num_nodes_generated)
-        output: Dictionary of steps if a solution is found, else None.
-        num_nodes_generated: number of nodes generated in the state space.
+        A dictionary with "output" and "number_of_states".
+        If no solution is found, "output" is None.
     """
-    # Initial configuration: all couples on the left bank
-    left = frozenset([('H', i) for i in range(1, N+1)] + [('W', i) for i in range(1, N+1)])
-    right = frozenset()
-    start = (left, right, 'L')
+    # Convert input arrays to frozensets of tuples if provided
+    if left is None:
+        left = frozenset([('H', i) for i in range(1, N+1)] + [('W', i) for i in range(1, N+1)])
+    else:
+        left = frozenset(tuple(p) for p in left)
+    
+    if right is None:
+        right = frozenset()
+    else:
+        right = frozenset(tuple(p) for p in right)
+    
+    start = (left, right, boat_pos)
     goal = (frozenset(), frozenset([('H', i) for i in range(1, N+1)] + [('W', i) for i in range(1, N+1)]), 'R')
     
     visited = set()
@@ -112,13 +124,18 @@ def solve_jealous_husbands(N=3, boat_capacity=2):
         return {"output": None, "number_of_states": nodes_generated[0]}
 
 if __name__ == "__main__":
-    N = 5
-    boat_capacity = N-1
-    result, num_generated = solve_jealous_husbands(N, boat_capacity)
-    if result:
-        for step, val in result.items():
+    # Example usage:
+    N = 4
+    boat_capacity = 4
+    left_bank = [["H",1], ["W",1], ["H",2], ["W",2]]
+    right_bank = [["H",3], ["W",3], ["H",4], ["W",4]]
+    boat_position = 'R'
+
+    result = solve_jealous_husbands(N=N, boat_capacity=boat_capacity, left=left_bank, right=right_bank, boat_pos=boat_position)
+    if result["output"] is not None:
+        for step, val in result["output"].items():
             print(step, val)
-        print("Number of nodes generated in the state space:", num_generated)
+        print("Number of states visited in the state space:", result["number_of_states"])
     else:
         print("No solution found.")
-        print("Number of nodes generated:", num_generated)
+        print("Number of states visited in the state space:", result["number_of_states"])
