@@ -33,7 +33,13 @@ curl -X POST \
 ```cmd
 curl -X POST \
   -H "Content-Type: application/json" \
-  -d '{"num_of_couples": 11, "solver": "a_star", "boat_capacity": 4}' \
+  -d '{"num_of_couples": 11, 
+       "solver": "a_star", 
+       "boat_capacity": 4,
+       "left": [[“H”,1], [“W”,1], [“H”,2], [“W”,2]],
+       "right": [[“H”,3], [“W”,3], [“H”,4], [“W”,4]],
+       "boat_position": "R"
+       }' \
   http://localhost:5000/jealous-husband
 ```
 
