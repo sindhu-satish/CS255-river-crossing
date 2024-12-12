@@ -10,15 +10,8 @@ python -m flask run
 ```
 
 ## API Call
-### Missionary Cannibal
-```cmd
-curl -X POST \
-  -H "Content-Type: application/json" \
-  -d '{"num_of_couples": 11, "solver": "a_star", "boat_capacity": 4}' \
-  http://localhost:5000/jealous-husband
-```
 
-### Jealous Husbands
+### Missionary Cannibal
 ```cmd
 curl -X POST \
   -H "Content-Type: application/json" \
@@ -36,7 +29,16 @@ curl -X POST \
   http://localhost:5000/missionary-cannibal
 ```
 
+### Jealous Husbands
+```cmd
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"num_of_couples": 11, "solver": "a_star", "boat_capacity": 4}' \
+  http://localhost:5000/jealous-husband
+```
+
 ## Output format
+
 ### Missionary Cannibal
 ```json
 {
