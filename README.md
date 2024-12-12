@@ -10,15 +10,8 @@ python -m flask run
 ```
 
 ## API Call
-### Missionary Cannibal
-```cmd
-curl -X POST \
-  -H "Content-Type: application/json" \
-  -d '{"num_of_couples": 11, "solver": "a_star", "boat_capacity": 4}' \
-  http://localhost:5000/jealous-husband
-```
 
-### Jealous Husbands
+### Missionary Cannibal
 ```cmd
 curl -X POST \
   -H "Content-Type: application/json" \
@@ -36,7 +29,16 @@ curl -X POST \
   http://localhost:5000/missionary-cannibal
 ```
 
+### Jealous Husbands
+```cmd
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"num_of_couples": 11, "solver": "a_star", "boat_capacity": 4}' \
+  http://localhost:5000/jealous-husband
+```
+
 ## Output format
+
 ### Missionary Cannibal
 ```json
 {
@@ -100,7 +102,7 @@ curl -X POST \
         ["H", 1], ["H", 2], ["H", 3], ["H", 4], ["H", 5], ["H", 6], ["H", 7], ["H", 8], ["H", 9], ["H", 10], ["H", 11],
         ["W", 1], ["W", 3], ["W", 5], ["W", 6], ["W", 7], ["W", 9], ["W", 10]
       ],
-      "right_bank": [["W", 2], ["W", 4], ["W", 8], ["W", 11"]],
+      "right_bank": [["W", 2], ["W", 4], ["W", 8], ["W", 11]],
       "boat_position": "R"
     },
     "2": {
@@ -108,7 +110,7 @@ curl -X POST \
         ["H", 1], ["H", 2], ["H", 3], ["H", 4], ["H", 5], ["H", 6], ["H", 7], ["H", 8], ["H", 9], ["H", 10], ["H", 11],
         ["W", 1], ["W", 2], ["W", 3], ["W", 5], ["W", 6], ["W", 7], ["W", 8], ["W", 9], ["W", 10]
       ],
-      "right_bank": [["W", 4], ["W", 11"]],
+      "right_bank": [["W", 4], ["W", 11]],
       "boat_position": "L"
     },
     "3": {
@@ -116,7 +118,7 @@ curl -X POST \
         ["H", 1], ["H", 2], ["H", 3], ["H", 4], ["H", 5], ["H", 6], ["H", 7], ["H", 8], ["H", 9], ["H", 10], ["H", 11],
         ["W", 2], ["W", 3], ["W", 7], ["W", 8], ["W", 9]
       ],
-      "right_bank": [["W", 1], ["W", 4], ["W", 5], ["W", 6], ["W", 10], ["W", 11"]],
+      "right_bank": [["W", 1], ["W", 4], ["W", 5], ["W", 6], ["W", 10], ["W", 11]],
       "boat_position": "R"
     },
     ...
@@ -124,7 +126,7 @@ curl -X POST \
       "left_bank": [],
       "right_bank": [
         ["H", 1], ["H", 2], ["H", 3], ["H", 4], ["H", 5], ["H", 6], ["H", 7], ["H", 8], ["H", 9], ["H", 10], ["H", 11],
-        ["W", 1], ["W", 2], ["W", 3], ["W", 4], ["W", 5], ["W", 6], ["W", 7], ["W", 8], ["W", 9], ["W", 10], ["W", 11"]
+        ["W", 1], ["W", 2], ["W", 3], ["W", 4], ["W", 5], ["W", 6], ["W", 7], ["W", 8], ["W", 9], ["W", 10], ["W", 11]
       ],
       "boat_position": "R"
     }
