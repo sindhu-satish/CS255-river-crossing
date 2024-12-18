@@ -144,3 +144,27 @@ http://localhost:5000/jealous-husband
 }
 
 ```
+
+### Performance Analysis
+
+This repository also includes performance analysis scripts that benchmark the solvers for both the Missionary-Cannibal and Jealous Husbands problems. These scripts evaluate the algorithms based on key metrics, such as:
+
+- **Number of States Traversed**: Total states explored by the solver to reach a solution.
+- **Solution Length**: Number of steps in the solution path.
+
+The analysis visualizes the relationship between problem size (e.g., number of missionaries, cannibals, or couples) and these metrics for each solver (`BFS`, `DFS`, and `A*`).
+
+To run the performance analysis, execute the respective Python scripts:
+
+```bash
+python plot_performance_missionary_cannibal.py
+python plot_performance_jh.py
+```
+
+The resulting plots will be saved in the working directory as PNG files:
+- `n_vs_number_of_states_all_solvers_mc.png`
+- `n_vs_output_size_all_solvers_mc.png`
+- `n_vs_number_of_states_all_solvers_jh.png`
+- `n_vs_output_size_all_solvers_jh.png` 
+
+These visualizations provide insights into the computational complexity and efficiency of the solvers.
