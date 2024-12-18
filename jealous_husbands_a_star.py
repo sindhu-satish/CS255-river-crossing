@@ -49,7 +49,7 @@ def generate_moves(state, N, boat_capacity):
 
 def heuristic(state, N):
     """
-    Heuristic function:
+    Heuristic:
     h = ceil((number_of_people_on_left) / 2)
     This heuristic is based on the assumption that, in the worst case,
     each trip can move at most 2 people.
@@ -72,12 +72,12 @@ def astar_search(N, start, goal, boat_capacity):
     heapq.heappush(open_set, (start_h, 0, start))
     visited = set()
     
-    num_traversed = 0  # This now counts how many states we traverse
+    num_traversed = 0  
 
     while open_set:
         f, g, current = heapq.heappop(open_set)
         
-        num_traversed += 1  # We are now traversing this state
+        num_traversed += 1  
         
         if current in visited:
             continue
@@ -111,7 +111,6 @@ def solve_jealous_husbands(N=3, boat_capacity=2, left=None, right=None, boat_pos
       "number_of_states": <int> (number of states traversed),
       "N": N
     """
-    # Convert input arrays to frozensets of tuples
     if left is None:
         left = frozenset([('H', i) for i in range(1, N+1)] + [('W', i) for i in range(1, N+1)])
     else:
@@ -128,7 +127,6 @@ def solve_jealous_husbands(N=3, boat_capacity=2, left=None, right=None, boat_pos
     if path is None:
         return {"output": None, "number_of_states": num_traversed, "N": N}
     
-    # Convert path to required output format
     output = {}
     for i, (l, r, bp) in enumerate(path):
         output[str(i)] = {

@@ -76,11 +76,11 @@ def astar_search(M_total, C_total, start_state, goal_state, boat_capacity):
     start_h = heuristic(start_state, M_total, C_total)
     heapq.heappush(open_heap, (start_h, 0, start_state))
     visited = set()
-    num_traversed = 0  # Count how many states are actually processed
+    num_traversed = 0  
 
     while open_heap:
         f, g, current = heapq.heappop(open_heap)
-        num_traversed += 1  # We are now traversing this state
+        num_traversed += 1  
 
         if current in visited:
             continue
@@ -137,7 +137,6 @@ def solve_missionaries_cannibals(M_total=3, C_total=3, boat_capacity=2,
         print("No solution found.")
         return {"output": None, "number_of_states": num_traversed, "N": M_total}
     
-    # Convert solution path to required output format
     output = {}
     for i, (Ml, Cl, Mr, Cr, bp) in enumerate(solution_path):
         output[str(i)] = {

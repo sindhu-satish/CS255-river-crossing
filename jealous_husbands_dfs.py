@@ -92,7 +92,7 @@ def solve_jealous_husbands(N=3, boat_capacity=2, left=None, right=None, boat_pos
     
     visited = set()
     parent = {start: None}
-    states_traversed = [0]  # Count the number of states traversed
+    states_traversed = [0]  
 
     if dfs_recursive(start, goal, N, boat_capacity, visited, parent, states_traversed):
         path = []
@@ -115,7 +115,6 @@ def solve_jealous_husbands(N=3, boat_capacity=2, left=None, right=None, boat_pos
 
 
 if __name__ == "__main__":
-    # Example usage:
     N = 3
     boat_capacity = 2
     result = solve_jealous_husbands(N=N, boat_capacity=boat_capacity)

@@ -61,7 +61,7 @@ def dfs(M_total, C_total, start_state, goal_state, boat_capacity):
 
     while stack:
         current_state = stack.pop()
-        num_traversed += 1  # We have now traversed this state
+        num_traversed += 1 
 
         if current_state == goal_state:
             # Reconstruct the path
@@ -109,7 +109,6 @@ def solve_missionaries_cannibals(M_total=3, C_total=3, boat_capacity=2,
         print("No solution found.")
         return {"output": None, "number_of_states": num_traversed, "N": M_total}
     
-    # Convert solution path to required output format
     output = {}
     for i, (Ml, Cl, Mr, Cr, bp) in enumerate(solution_path):
         output[str(i)] = {

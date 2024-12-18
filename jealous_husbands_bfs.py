@@ -58,7 +58,6 @@ def solve_jealous_husbands(N=3, boat_capacity=2, left=None, right=None, boat_pos
         "number_of_states_traversed": Number of states traversed during the BFS
         "N": number of couples
     """
-    # Convert input arrays to frozensets of tuples if given
     if left is None:
         left = frozenset([('H', i) for i in range(1, N+1)] + [('W', i) for i in range(1, N+1)])
     else:
@@ -76,11 +75,11 @@ def solve_jealous_husbands(N=3, boat_capacity=2, left=None, right=None, boat_pos
     queue = deque([start])
     visited = set([start])
     parent = {start: None}
-    states_traversed = 0  # We will count how many states are actually processed
+    states_traversed = 0  
 
     while queue:
         state = queue.popleft()
-        states_traversed += 1  # We are now processing (traversing) this state
+        states_traversed += 1  
         
         if state == goal:
             # Reconstruct path
@@ -91,7 +90,7 @@ def solve_jealous_husbands(N=3, boat_capacity=2, left=None, right=None, boat_pos
                 cur = parent[cur]
             path.reverse()
             
-            # Convert path to readable output
+
             output = {}
             for i, (l, r, bp) in enumerate(path):
                 output[str(i)] = {
@@ -112,7 +111,6 @@ def solve_jealous_husbands(N=3, boat_capacity=2, left=None, right=None, boat_pos
 
 
 if __name__ == "__main__":
-    # Example usage:
     N = 4
     boat_capacity = 4
     left_bank = [["H",1], ["W",1], ["H",2], ["W",2]]
