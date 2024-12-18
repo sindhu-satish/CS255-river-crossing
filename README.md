@@ -91,7 +91,6 @@ http://localhost:5000/jealous-husband
   },
   "number_of_states": 15
 }
-
 ```
 
 ### Jealous Husbands
@@ -142,7 +141,6 @@ http://localhost:5000/jealous-husband
   },
   "number_of_states": 11179
 }
-
 ```
 
 ### Performance Analysis
@@ -151,8 +149,6 @@ This repository also includes performance analysis scripts that benchmark the so
 
 - **Number of States Traversed**: Total states explored by the solver to reach a solution.
 - **Solution Length**: Number of steps in the solution path.
-
-The analysis visualizes the relationship between problem size (e.g., number of missionaries, cannibals, or couples) and these metrics for each solver (`BFS`, `DFS`, and `A*`).
 
 To run the performance analysis, execute the respective Python scripts:
 
