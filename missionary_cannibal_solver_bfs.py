@@ -11,7 +11,7 @@ def is_valid_state(M_left, C_left, M_right, C_right, M_total, C_total):
         return False
     
     # Check constraints: 
-    # 1) On either bank, if missionaries > 0, they cannot be outnumbered by cannibals
+    # On either bank, if missionaries > 0, they cannot be outnumbered by cannibals.
     if M_left > 0 and C_left > M_left:
         return False
     if M_right > 0 and C_right > M_right:
@@ -29,9 +29,8 @@ def get_next_states(state, M_total, C_total, boat_capacity):
     
     moves = []
     # Generate possible moves: 
-    # For each number of missionaries M_move and cannibals C_move, 
-    # 1 <= M_move + C_move <= boat_capacity
-    # and at least one of them must be > 0.
+    # For each number of missionaries (M_move) and cannibals (C_move),
+    # 1 <= M_move + C_move <= boat_capacity and at least one > 0.
     for M_move in range(0, boat_capacity+1):
         for C_move in range(0, boat_capacity+1):
             if 1 <= M_move + C_move <= boat_capacity:
@@ -58,16 +57,17 @@ def bfs(M_total, C_total, start_state, goal_state, boat_capacity):
     """
     Perform a BFS search to find a path from start_state to goal_state.
     Returns:
-        path (if found) and number of nodes generated.
+        (path, number_of_states_traversed)
     """
     queue = deque([start_state])
     visited = set([start_state])
-    parent = {start_state: None}  # to reconstruct path
-    num_generated = 1  # Count the start state as generated
+    parent = {start_state: None}
+    num_traversed = 0  # count how many states we have processed (popped from queue)
 
     while queue:
         current_state = queue.popleft()
-        
+        num_traversed += 1  # We have now traversed this state
+
         if current_state == goal_state:
             # Reconstruct the path
             path = []
@@ -75,33 +75,27 @@ def bfs(M_total, C_total, start_state, goal_state, boat_capacity):
                 path.append(current_state)
                 current_state = parent[current_state]
             path.reverse()
-            return path, num_generated
+            return path, num_traversed
         
         for nxt in get_next_states(current_state, M_total, C_total, boat_capacity):
             if nxt not in visited:
                 visited.add(nxt)
                 parent[nxt] = current_state
                 queue.append(nxt)
-                num_generated += 1
 
-    return None, num_generated
+    return None, num_traversed
 
 def solve_missionaries_cannibals(M_total=3, C_total=3, boat_capacity=2, 
                                 M_left=None, C_left=None, M_right=None, C_right=None, boat_position='left'):
     """
     Solve the missionaries and cannibals problem using BFS.
     
-    Inputs:
-    - M_total: total number of missionaries
-    - C_total: total number of cannibals
-    - boat_capacity: capacity of the boat
-    - M_left, C_left, M_right, C_right: initial distribution. Defaults to all on left.
-    - boat_position: 'left' or 'right'
-    
     Returns:
-      (output, num_generated)
-      output: dictionary representing the path if solution is found, else None.
-      num_generated: number of states generated in the search.
+      {
+        "output": solution_path_as_dict or None,
+        "number_of_states": number_of_states_traversed,
+        "N": M_total
+      }
     """
     if M_left is None:
         M_left = M_total
@@ -115,10 +109,10 @@ def solve_missionaries_cannibals(M_total=3, C_total=3, boat_capacity=2,
     start_state = (M_left, C_left, M_right, C_right, boat_position)
     goal_state = (0, 0, M_total, C_total, 'right')
     
-    solution_path, num_generated = bfs(M_total, C_total, start_state, goal_state, boat_capacity)
+    solution_path, num_traversed = bfs(M_total, C_total, start_state, goal_state, boat_capacity)
     if solution_path is None:
         print("No solution found.")
-        return {"output": None, "number_of_states": num_generated}
+        return {"output": None, "number_of_states": num_traversed, "N": M_total}
     
     # Convert solution path to required output format
     output = {}
@@ -130,17 +124,17 @@ def solve_missionaries_cannibals(M_total=3, C_total=3, boat_capacity=2,
             'C_right': Cr,
             'boat_position': bp
         }
-    return {"output": output, "number_of_states": num_generated}
+    return {"output": output, "number_of_states": num_traversed, "N": M_total}
 
 if __name__ == "__main__":
-    M_total = 6
-    C_total = M_total
-    boat_capacity = M_total - 1
-    result, num_generated = solve_missionaries_cannibals(M_total=M_total, C_total=C_total, boat_capacity=boat_capacity)
-    if result:
-        for step, val in result.items():
+    M_total = 3
+    C_total = 3
+    boat_capacity = 2
+    result = solve_missionaries_cannibals(M_total=M_total, C_total=C_total, boat_capacity=boat_capacity)
+    if result["output"] is not None:
+        for step, val in result["output"].items():
             print(step, val)
-        print("Number of nodes generated in the state space:", num_generated)
+        print("Number of states traversed in the state space:", result["number_of_states"])
     else:
         print("No solution found.")
-        print("Number of nodes generated:", num_generated)
+        print("Number of states traversed:", result["number_of_states"])

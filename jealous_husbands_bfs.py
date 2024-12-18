@@ -52,17 +52,11 @@ def generate_moves(state, N, boat_capacity):
 def solve_jealous_husbands(N=3, boat_capacity=2, left=None, right=None, boat_pos='L'):
     """
     Solve the jealous husbands problem using BFS with a possibly arbitrary initial state.
-    
-    Parameters:
-        N (int): number of couples
-        boat_capacity (int): capacity of the boat
-        left (array of arrays): e.g. [["H",1], ["W",1], ["H",2], ["W",2]]
-        right (array of arrays): e.g. [["H",3], ["W",3], ["H",4], ["W",4]]
-        boat_pos (str): 'L' or 'R' indicating where the boat starts
-        
-    Returns:
-       A dictionary: {"output": <path_dict>, "number_of_states": <int>}
-       If no solution is found, "output" is None.
+
+    Returns a dictionary:
+        "output": A dictionary representation of the path if a solution is found, otherwise None
+        "number_of_states_traversed": Number of states traversed during the BFS
+        "N": number of couples
     """
     # Convert input arrays to frozensets of tuples if given
     if left is None:
@@ -82,9 +76,12 @@ def solve_jealous_husbands(N=3, boat_capacity=2, left=None, right=None, boat_pos
     queue = deque([start])
     visited = set([start])
     parent = {start: None}
-    
+    states_traversed = 0  # We will count how many states are actually processed
+
     while queue:
         state = queue.popleft()
+        states_traversed += 1  # We are now processing (traversing) this state
+        
         if state == goal:
             # Reconstruct path
             path = []
@@ -102,15 +99,17 @@ def solve_jealous_husbands(N=3, boat_capacity=2, left=None, right=None, boat_pos
                     'right_bank': sorted(list(r)),
                     'boat_position': bp
                 }
-            return {"output": output, "number_of_states": len(visited)}
+            return {"output": output, "number_of_states": states_traversed, "N": N}
         
+        # Generate next moves
         for nxt in generate_moves(state, N, boat_capacity):
             if nxt not in visited:
                 visited.add(nxt)
                 parent[nxt] = state
                 queue.append(nxt)
     
-    return {"output": None, "number_of_states": len(visited)}
+    return {"output": None, "number_of_states": states_traversed, "N": N}
+
 
 if __name__ == "__main__":
     # Example usage:
@@ -124,7 +123,7 @@ if __name__ == "__main__":
     if result["output"] is not None:
         for step, val in result["output"].items():
             print(step, val)
-        print("Number of visited states:", result["number_of_states"])
+        print("Number of states traversed:", result["number_of_states"])
     else:
         print("No solution found.")
-        print("Number of visited states:", result["number_of_states"])
+        print("Number of states traversed:", result["number_of_states"])

@@ -52,8 +52,7 @@ def heuristic(state, N):
     Heuristic function:
     h = ceil((number_of_people_on_left) / 2)
     This heuristic is based on the assumption that, in the worst case,
-    each trip can move at most 2 people. If boat_capacity > 2,
-    you may consider adjusting the heuristic. For now, we leave it as is.
+    each trip can move at most 2 people.
     """
     left, right, boat_pos = state
     people_on_left = len(left)
@@ -62,22 +61,23 @@ def heuristic(state, N):
 def astar_search(N, start, goal, boat_capacity):
     """
     A* search for the Jealous Husbands problem.
-    Returns the path and the number of nodes generated.
+    Returns the path and the number of nodes (states) traversed.
     """
     g_cost = {start: 0}
     parent = {start: None}
     
     start_h = heuristic(start, N)
     # Priority queue of (f, g, state)
-    # f = g + h
     open_set = []
     heapq.heappush(open_set, (start_h, 0, start))
     visited = set()
     
-    num_generated = 1  # Counting the start node as generated
+    num_traversed = 0  # This now counts how many states we traverse
 
     while open_set:
         f, g, current = heapq.heappop(open_set)
+        
+        num_traversed += 1  # We are now traversing this state
         
         if current in visited:
             continue
@@ -90,7 +90,7 @@ def astar_search(N, start, goal, boat_capacity):
                 path.append(current)
                 current = parent[current]
             path.reverse()
-            return path, num_generated
+            return path, num_traversed
         
         for nxt in generate_moves(current, N, boat_capacity):
             tentative_g = g + 1
@@ -100,23 +100,16 @@ def astar_search(N, start, goal, boat_capacity):
                 h = heuristic(nxt, N)
                 f = tentative_g + h
                 heapq.heappush(open_set, (f, tentative_g, nxt))
-                num_generated += 1
-    return None, num_generated
+    return None, num_traversed
 
 def solve_jealous_husbands(N=3, boat_capacity=2, left=None, right=None, boat_pos='L'):
     """
     Solve the Jealous Husbands problem using A* search with a potentially arbitrary initial state.
-    
-    Parameters:
-      N (int): number of couples
-      boat_capacity (int): capacity of the boat
-      left (array of arrays): e.g. [["H",1], ["W",1], ...]
-      right (array of arrays): e.g. [["H",3], ["W",3], ...]
-      boat_pos (str): 'L' or 'R' indicating where the boat starts. Default: 'L'
       
-    Returns:
-      A dictionary with "output": <solution_path_dict> and "number_of_states": <int>
-      If no solution is found, "output" is None.
+    Returns a dictionary with:
+      "output": <solution_path_dict> or None if no solution,
+      "number_of_states": <int> (number of states traversed),
+      "N": N
     """
     # Convert input arrays to frozensets of tuples
     if left is None:
@@ -131,9 +124,9 @@ def solve_jealous_husbands(N=3, boat_capacity=2, left=None, right=None, boat_pos
     start = (left, right, boat_pos)
     goal = (frozenset(), frozenset([('H', i) for i in range(1, N+1)] + [('W', i) for i in range(1, N+1)]), 'R')
     
-    path, num_generated = astar_search(N, start, goal, boat_capacity)
+    path, num_traversed = astar_search(N, start, goal, boat_capacity)
     if path is None:
-        return {"output": None, "number_of_states": num_generated}
+        return {"output": None, "number_of_states": num_traversed, "N": N}
     
     # Convert path to required output format
     output = {}
@@ -143,7 +136,7 @@ def solve_jealous_husbands(N=3, boat_capacity=2, left=None, right=None, boat_pos
             'right_bank': sorted(list(r)),
             'boat_position': bp
         }
-    return {"output": output, "number_of_states": num_generated}
+    return {"output": output, "number_of_states": num_traversed, "N": N}
 
 if __name__ == "__main__":
     N = 4
@@ -153,9 +146,4 @@ if __name__ == "__main__":
     boat_pos = 'R'
 
     result = solve_jealous_husbands(N=N, boat_capacity=boat_capacity, left=left, right=right, boat_pos=boat_pos)
-    if result["output"] is not None:
-        for step, val in result["output"].items():
-            print(step, val)
-    else:
-        print("No solution found.")
-    print("Number of nodes generated:", result["number_of_states"])
+    print(result)
